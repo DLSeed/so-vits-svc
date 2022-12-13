@@ -144,7 +144,7 @@ def mkdir(paths: list):
 
 
 class Svc(object):
-    def __init__(self, net_g_path, config_path, hubert_path="/content/drive/MyDrive/nyarumul/48k/hubert-soft-0d54a1f4.pt",
+    def __init__(self, net_g_path, config_path, hubert_path="hubert/hubert-soft-0d54a1f4.pt",
                  onnx=False):
         self.onnx = onnx
         self.net_g_path = net_g_path
