@@ -14,7 +14,7 @@ from inference.infer_tool import Svc
 logging.getLogger('numba').setLevel(logging.WARNING)
 chunks_dict = infer_tool.read_temp("inference/chunks_temp.json")
 
-model_path = "logs/48k/G_174000-Copy1.pth"
+model_path = "logs/32k/G_174000-Copy1.pth"
 config_path = "configs/config.json"
 svc_model = Svc(model_path, config_path)
 infer_tool.mkdir(["raw", "results"])
@@ -33,16 +33,7 @@ for clean_name, tran in zip(clean_names, trans):
         raw_audio_path += ".wav"
     infer_tool.format_wav(raw_audio_path)
     wav_path = Path(raw_audio_path).with_suffix('.wav')
-    audio, sr = librosa.load(wav_path, mono=True, sr=None)
-    wav_hash = infer_tool.get_md5(audio)
-    if wav_hash in chunks_dict.keys():
-        print("load chunks from temp")
-        chunks = chunks_dict[wav_hash]["chunks"]
-    else:
-        chunks = slicer.cut(wav_path, db_thresh=slice_db)
-    print(chunks)
-    chunks_dict[wav_hash] = {"chunks": chunks, "time": int(time.time())}
-    infer_tool.write_temp("inference/chunks_temp.json", chunks_dict)
+    chunks = slicer.cut(wav_path, db_thresh=slice_db)
     audio_data, audio_sr = slicer.chunks2audio(wav_path, chunks)
 
     for spk in spk_list:
